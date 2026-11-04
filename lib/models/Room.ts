@@ -1,22 +1,15 @@
-import IRoomBookingDatabase from "@/lib/db/IDatabase";
+export class Room {
 
-class Room {
+    private _id: number;
+    public get id(): number { return this._id; }
 
-    private _database: IRoomBookingDatabase;
+    public name: string;
+    public capacity: number;
 
-    private static _model: Room;
-
-    private constructor(database: IRoomBookingDatabase) {
-        this._database = database;
-    }
-
-    public static createModel(database: IRoomBookingDatabase): Room {
-        if (!Room._model) {
-            Room._model = new Room(database);
-        }
-        return Room._model;
+    public constructor(id: number, name: string, capacity: number) {
+        this._id = id;
+        this.name = name;
+        this.capacity = capacity;
     }
 
 }
-
-export default Room;

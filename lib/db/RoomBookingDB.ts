@@ -1,7 +1,8 @@
 import Database from 'better-sqlite3';
-import IRoomBookingDatabase from "@/lib/db/IRoomBookingDatabase";
+import { Room } from "@/lib/models/Room";
+import { Booking } from "@/lib/models/Booking";
 
-class RoomBookingDB implements IRoomBookingDatabase {
+export default class RoomBookingDB {
 
     private _db;
 
@@ -9,11 +10,6 @@ class RoomBookingDB implements IRoomBookingDatabase {
 
     private constructor() {
         this._db = new Database('room_booking_db.db');
-        console.log('New database instance created!');
-    }
-
-    public connect() {
-        console.log('Connecting to database...');
     }
 
     public static getInstance(): RoomBookingDB {
@@ -24,5 +20,3 @@ class RoomBookingDB implements IRoomBookingDatabase {
     }
 
 }
-
-export default RoomBookingDB;
