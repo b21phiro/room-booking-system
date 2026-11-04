@@ -5,6 +5,7 @@ import "./globals.css";
 const roboto = Roboto_Flex({
   weight: ["400"],
   subsets: ["latin"],
+  variable: "--font-roboto"
 })
 
 export const metadata: Metadata = {

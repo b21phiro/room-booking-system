@@ -1,4 +1,5 @@
 import Checkmark from "@/lib/icons/Checkmark";
+import classNames from "@/lib/utils/classNames";
 
 export type CheckboxProps = {
     value: string | number;
@@ -25,7 +26,7 @@ export default function Checkbox({ name, value, label, checked, onChange }: Chec
                 className="inline-flex items-center justify-center border border-faint-foreground rounded-xs size-5"
                 aria-hidden={true}
             >
-                <Checkmark ariaHidden={true} className={checked ? 'block' : 'hidden'} />
+                <Checkmark ariaHidden={true} className={classNames('text-action', checked ? 'block' : 'hidden')} />
             </span>
         </label>
     );
