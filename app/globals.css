@@ -4,6 +4,7 @@
   --background: #ECECEC;
   --foreground: #1D1D1D;
   --muted-foreground: #BDBDBD;
+  --faint-foreground: #757575;
   --foreground-text: #ECECEC;
 }
 
@@ -12,9 +13,11 @@
   --color-foreground: var(--foreground);
   --color-foreground-text: var(--foreground-text);
   --color-muted-foreground: var(--muted-foreground);
+  --color-faint-foreground: var(--faint-foreground);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  min-height: 100dvh;
 }
