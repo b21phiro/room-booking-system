@@ -47,7 +47,11 @@ export function ListBoxOptions({ options, onOptionChange }: ListBoxOptionsProps)
             />
         </div>
     );
-    return items;
+    return (
+        <div className="min-h-24 max-h-[25dvh] pr-4 overflow-auto">
+            {items}
+        </div>
+    );
 }
 
 export function ComboboxTrigger(

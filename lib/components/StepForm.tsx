@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import ComboBox, { ListBoxOptions, OnOptionChange, OptionProps } from "@/lib/components/ComboBox";
 import Button from "@/lib/components/Button";
-import {useRooms} from "@/lib/hooks/useRooms";
+import { useRooms } from "@/lib/hooks/client/useRooms";
 
 export default function StepForm() {
 
