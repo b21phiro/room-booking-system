@@ -5,6 +5,7 @@ import Button from "@/lib/components/Button";
 import { useRooms } from "@/lib/hooks/client/useRooms";
 import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
+import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
 
 export type StepFormProps = {
     rooms: Room[];
@@ -20,6 +21,16 @@ export default function StepForm({ rooms }: StepFormProps) {
 
     const [ selectedRooms, setSelectedRooms ] = useState<Room[]>([]);
     const roomsForBookings = selectedRooms.length > 0 ? selectedRooms : rooms;
+
+    const [ selectedTime, setSelectedTime ] = useState<AvailableRoom | null>(null);
+
+    const handleSelectTime = (availableRoom: AvailableRoom) => {
+        setSelectedTime(prev =>
+            prev && getAvailableRoomId(prev) === getAvailableRoomId(availableRoom)
+                ? null
+                : availableRoom
+        );
+    };
 
     const handleRoomSelection = () => {
         setShowRoomsComboboxOpen(false);
@@ -58,7 +69,11 @@ export default function StepForm({ rooms }: StepFormProps) {
                         </div>
                     </ComboBox>
                     <div className="flex flex-col flex-1 min-h-0">
-                        <Bookings rooms={roomsForBookings} />
+                        <Bookings
+                            rooms={roomsForBookings}
+                            selectedTime={selectedTime}
+                            onSelectTime={handleSelectTime}
+                        />
                     </div>
                 </div>
                 <Button type="button" onClick={() => setStep(2)}>

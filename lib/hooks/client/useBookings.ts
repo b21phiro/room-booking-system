@@ -17,6 +17,10 @@ export type AvailableRoom = {
     to: Date;
 };
 
+export function getAvailableRoomId(availableRoom: AvailableRoom) {
+    return `${availableRoom.room.id}-${availableRoom.from.toISOString()}-${availableRoom.to.toISOString()}`;
+}
+
 const workdayStartHour = 9;
 const workdayEndHour = 17;
 const defaultDayRange = 3;

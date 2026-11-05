@@ -4,9 +4,11 @@ import { AvailableRoom } from "@/lib/hooks/client/useBookings";
 
 export type CalendarProps = CalenderControlsProps & {
     availableRooms: AvailableRoom[];
+    selectedTime: AvailableRoom | null;
+    onSelectTime: (availableRoom: AvailableRoom) => void;
 }
 
-export default function Calendar({ onGoForwardsClick, onGoBackwardsClick, dateFrom, dateTo, availableRooms } : CalendarProps) {
+export default function Calendar({ onGoForwardsClick, onGoBackwardsClick, dateFrom, dateTo, availableRooms, selectedTime, onSelectTime } : CalendarProps) {
     return (
         <div className="flex flex-col flex-1 min-h-0 gap-4">
             <CalendarControls
@@ -16,7 +18,13 @@ export default function Calendar({ onGoForwardsClick, onGoBackwardsClick, dateFr
                 dateTo={dateTo}
             />
             <div className="flex flex-col flex-1 min-h-0 border border-muted-foreground rounded-lg">
-                <CalendarContent dateFrom={dateFrom} dateTo={dateTo} availableRooms={availableRooms} />
+                <CalendarContent
+                    dateFrom={dateFrom}
+                    dateTo={dateTo}
+                    availableRooms={availableRooms}
+                    selectedTime={selectedTime}
+                    onSelectTime={onSelectTime}
+                />
             </div>
         </div>
     );
