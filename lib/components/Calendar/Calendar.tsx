@@ -1,21 +1,22 @@
-import CalendarControls from "@/lib/components/Calendar/CalendarControls";
+import CalendarControls, { CalenderControlsProps } from "@/lib/components/Calendar/CalendarControls";
 import CalendarContent from "@/lib/components/Calendar/CalendarContent";
-import useCalendar from "@/lib/hooks/client/useCalendar";
+import { AvailableRoom } from "@/lib/hooks/client/useBookings";
 
-export default function Calendar() {
+export type CalendarProps = CalenderControlsProps & {
+    availableRooms: AvailableRoom[];
+}
 
-    const { goForwards, goBackwards, dateFrom, dateTo } = useCalendar();
-
+export default function Calendar({ onGoForwardsClick, onGoBackwardsClick, dateFrom, dateTo, availableRooms } : CalendarProps) {
     return (
         <div className="flex flex-col flex-1 min-h-0 gap-4">
             <CalendarControls
-                onGoForwardsClick={goForwards}
-                onGoBackwardsClick={goBackwards}
+                onGoForwardsClick={onGoForwardsClick}
+                onGoBackwardsClick={onGoBackwardsClick}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
             />
             <div className="flex flex-col flex-1 min-h-0 border border-muted-foreground rounded-lg">
-                <CalendarContent dateFrom={dateFrom} dateTo={dateTo} />
+                <CalendarContent dateFrom={dateFrom} dateTo={dateTo} availableRooms={availableRooms} />
             </div>
         </div>
     );

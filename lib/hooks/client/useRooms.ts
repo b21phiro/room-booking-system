@@ -1,20 +1,24 @@
 'use client'
-import {useEffect, useState} from "react";
-import {getAllRooms, Room } from "@/lib/room";
+import { useState } from "react";
+import { Room } from "@/lib/data/room";
 
-export type RoomProp = Room & {
+export type RoomProps = Room & {
     value: string;
     label: string;
     checked: boolean;
 }
 
+export type UseRoomsProps = {
+    rooms: Room[];
+}
+
 export type OnRoomChange = (id: number, checked: boolean) => void;
 
-export function useRooms() {
+export function useRooms({ rooms }: UseRoomsProps) {
 
-    const [ rooms, setRooms ] = useState<RoomProp[]>([]);
+    const [ getRooms, setRooms ] = useState<RoomProps[]>(rooms.map(room => ({ ...room, checked: false, label: `${room.name} (${room.capacity} personer)`, value: room.id.toString() })));
 
-    const selectedAmount = rooms.filter(room => room.checked).length;
+    const selectedAmount = getRooms.filter(room => room.checked).length;
 
     const handleSelectRoomChange: OnRoomChange = (id: number, checked: boolean) => {
         setRooms(prev =>
@@ -30,18 +34,8 @@ export function useRooms() {
                 ({ ...room, checked: false })));
     };
 
-    // Fetches rooms initially from the database.
-    useEffect(() => {
-        const fetchRooms = () => {
-            getAllRooms().then(_rooms => {
-                setRooms(_rooms.map(room => ({ ...room, checked: false, label: `${room.name} (${room.capacity} personer)`, value: room.id.toString() })));
-            });
-        };
-        fetchRooms();
-    }, []);
-
     return {
-        rooms,
+        getRooms,
         selectRoom: handleSelectRoomChange,
         selectedAmount,
         unSelectAll: handleUnselectAll,

@@ -1,17 +1,25 @@
 'use client'
 import React, { useState } from "react";
-import ComboBox, { ListBoxOptions, OnOptionChange, OptionProps } from "@/lib/components/ComboBox";
+import ComboBox, { ListBoxOptions } from "@/lib/components/ComboBox";
 import Button from "@/lib/components/Button";
-import Calendar from "@/lib/components/Calendar/Calendar";
 import { useRooms } from "@/lib/hooks/client/useRooms";
+import { Room } from "@/lib/data/room";
+import { Bookings } from "@/lib/components/Bookings";
 
-export default function StepForm() {
+export type StepFormProps = {
+    rooms: Room[];
+}
+
+export default function StepForm({ rooms }: StepFormProps) {
 
     const [ step, setStep ] = useState(0);
-    const { rooms, selectRoom, selectedAmount, unSelectAll, anySelected } = useRooms();
+    const { getRooms, selectRoom, selectedAmount, unSelectAll, anySelected } = useRooms({ rooms });
 
     const [ showRoomsLabel, setShowRoomsLabel ] = useState("Mötesrum");
     const [ showRoomsComboboxOpen, setShowRoomsComboboxOpen ] = useState(false);
+
+    const [ selectedRooms, setSelectedRooms ] = useState<Room[]>([]);
+    const roomsForBookings = selectedRooms.length > 0 ? selectedRooms : rooms;
 
     const handleRoomSelection = () => {
         setShowRoomsComboboxOpen(false);
@@ -22,6 +30,7 @@ export default function StepForm() {
         } else {
             setShowRoomsLabel("Mötesrum");
         }
+        setSelectedRooms(getRooms.filter(room => room.checked));
     };
 
     return (
@@ -42,14 +51,14 @@ export default function StepForm() {
                         onOpenChange={setShowRoomsComboboxOpen}
                         label={showRoomsLabel}
                     >
-                        <ListBoxOptions options={rooms} onOptionChange={selectRoom} />
+                        <ListBoxOptions options={getRooms} onOptionChange={selectRoom} />
                         <div className="flex gap-2 my-4">
                             <Button onClick={handleRoomSelection}>Välj</Button>
                             <Button onClick={unSelectAll} disabled={!anySelected}>Avmarkera</Button>
                         </div>
                     </ComboBox>
                     <div className="flex flex-col flex-1 min-h-0">
-                        <Calendar />
+                        <Bookings rooms={roomsForBookings} />
                     </div>
                 </div>
                 <Button type="button" onClick={() => setStep(2)}>
