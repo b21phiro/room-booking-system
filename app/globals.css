@@ -7,6 +7,7 @@
   --faint-foreground: #757575;
   --foreground-text: #ECECEC;
   --action: #004D40;
+  --action-border: #004D40;
 }
 
 @theme inline {
@@ -17,6 +18,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-faint-foreground: var(--faint-foreground);
   --color-action: var(--action);
+  --color-action-border: var(--action-border);
 }
 
 body {
