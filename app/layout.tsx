@@ -3,10 +3,9 @@ import { Roboto_Flex } from "next/font/google";
 import "./globals.css";
 
 const roboto = Roboto_Flex({
-  weight: ["400"],
   subsets: ["latin"],
-  variable: "--font-roboto"
-})
+  variable: "--font-roboto",
+});
 
 export const metadata: Metadata = {
   title: "Room booking",
@@ -19,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="sv"
       className={`${roboto.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col px-4 py-8">
+      <body className="h-dvh flex flex-col px-4 py-8">
         {children}
       </body>
     </html>

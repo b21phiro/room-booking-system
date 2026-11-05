@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import ComboBox, { ListBoxOptions, OnOptionChange, OptionProps } from "@/lib/components/ComboBox";
 import Button from "@/lib/components/Button";
+import Calendar from "@/lib/components/Calendar/Calendar";
 import { useRooms } from "@/lib/hooks/client/useRooms";
 
 export default function StepForm() {
@@ -24,7 +25,7 @@ export default function StepForm() {
     };
 
     return (
-        <form className="flex-1 flex">
+        <form className="flex-1 min-h-0 flex">
             <div className={step === 0 ? 'flex-1 flex flex-col pt-32' : 'hidden'}>
                 <div className="flex-1">
                     <h1 id="step-title-0" className="text-7xl">Boka ett rum</h1>
@@ -33,8 +34,8 @@ export default function StepForm() {
                     Boka
                 </Button>
             </div>
-            <div className={step === 1 ? 'flex-1 flex flex-col' : 'hidden'}>
-                <div className="flex-1 pt-20 flex flex-col gap-8">
+            <div className={step === 1 ? 'flex-1 min-h-0 flex flex-col' : 'hidden'}>
+                <div className="flex-1 min-h-0 pt-20 flex flex-col gap-8 pb-8">
                     <h1 id="step-title-1" className="text-4xl">Välj en tid</h1>
                     <ComboBox
                         open={showRoomsComboboxOpen}
@@ -47,6 +48,9 @@ export default function StepForm() {
                             <Button onClick={unSelectAll} disabled={!anySelected}>Avmarkera</Button>
                         </div>
                     </ComboBox>
+                    <div className="flex flex-col flex-1 min-h-0">
+                        <Calendar />
+                    </div>
                 </div>
                 <Button type="button" onClick={() => setStep(2)}>
                     Nästa
