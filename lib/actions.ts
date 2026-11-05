@@ -32,16 +32,25 @@ export async function makeBooking(_prevState: BookingActionState, formData: Form
     }
 
     const exists = await getBookingForRoomNumber(room, new Date(from), new Date(to));
-    if (exists.length > 0) {
+    if (exists && exists.length > 0) {
         return { status: 400, message: 'Room already booked for the specified dates' };
     }
 
-    const stmt = db.prepare("INSERT INTO Booking (room, from_date, to_date, firstname, surname) VALUES (?, ?, ?, ?, ?)");
-    const result = stmt.run(room, from, to, firstname, surname);
 
-    if (result.changes < 1) {
+    try {
+        const stmt = db.prepare("INSERT INTO Booking (room, from_date, to_date, firstname, surname) VALUES (?, ?, ?, ?, ?)");
+        const result = stmt.run(room, from, to, firstname, surname);
+        if (result.changes < 1) {
+            console.error('Failed to make booking, no changes made');
+            return { status: 500, message: 'Failed to make booking' };
+        }
+        return { status: 200, message: 'Booking made successfully' };
+
+    } catch (error) {
+        console.error(error);
         return { status: 500, message: 'Failed to make booking' };
     }
 
-    return { status: 200, message: 'Booking made successfully' };
+
+
 }
