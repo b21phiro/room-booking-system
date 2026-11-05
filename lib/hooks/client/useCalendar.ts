@@ -4,14 +4,14 @@ import { getDaysAhead } from "@/lib/utils/date";
 
 export default function useCalendar() {
 
-    const today = new Date();
     const dayRange = 3;
 
-    const [dateFrom, setDateFrom] = useState(today);
-    const [dateTo, setDateTo] = useState(getDaysAhead(dateFrom, dayRange));
+    const [dateFrom, setDateFrom] = useState<Date | null>(null);
+    const [dateTo, setDateTo] = useState<Date | null>(null);
 
     const handleGoForwards = () => {
         setDateFrom(prev => {
+            if (!prev) return null;
             const date = new Date(prev);
             date.setDate(new Date(prev).getDate() + 1);
             return date;
@@ -20,6 +20,7 @@ export default function useCalendar() {
 
     const handleGoBackwards = () => {
         setDateFrom(prev => {
+            if (!prev) return null;
             const date = new Date(prev);
             date.setDate(new Date(prev).getDate() - 1);
             return date;
@@ -27,6 +28,11 @@ export default function useCalendar() {
     };
 
     useEffect(() => {
+        setDateFrom(new Date());
+    }, []);
+
+    useEffect(() => {
+        if (!dateFrom) return;
         setDateTo(getDaysAhead(dateFrom, dayRange));
     }, [dateFrom]);
 

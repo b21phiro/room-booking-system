@@ -2,16 +2,16 @@ import CalendarColumn from "@/lib/components/Calendar/CalendarColumn";
 import {getDatesBetween} from "@/lib/utils/date";
 
 export type CalendarContentProps = {
-    dateFrom: Date;
-    dateTo: Date;
+    dateFrom: Date | null;
+    dateTo: Date | null;
 };
 
 function CalendarColumnRange({ dateFrom, dateTo }: CalendarContentProps) {
-    const colsBetween = getDatesBetween(dateFrom, dateTo).map((date, i) =>
+    const colsBetween = (dateFrom && dateTo) ? getDatesBetween(dateFrom, dateTo).map((date, i) =>
         <div key={i} className="border-r border-muted-foreground flex min-h-0 flex-col">
             <CalendarColumn date={date} />
         </div>
-    );
+    ) : null;
     return (
         <>
             <div className="border-r border-muted-foreground flex min-h-0 flex-col">

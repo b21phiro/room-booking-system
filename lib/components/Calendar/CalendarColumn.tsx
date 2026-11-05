@@ -2,7 +2,7 @@ import CalendarColumnHead from "@/lib/components/Calendar/CalendarColumnHead";
 import CalendarColumnContent from "@/lib/components/Calendar/CalendarColumnContent";
 
 export type CalendarColumnProps = {
-    date: Date;
+    date: Date | null;
 };
 
 export default function CalendarColumn({ date }: CalendarColumnProps) {

@@ -4,8 +4,8 @@ import CalendarControlsLabel from "@/lib/components/Calendar/CalendarControlsLab
 export type CalenderControlsProps = {
     onGoForwardsClick: () => void;
     onGoBackwardsClick: () => void;
-    dateFrom: Date;
-    dateTo: Date;
+    dateFrom: Date | null;
+    dateTo: Date | null;
 }
 
 export default function CalendarControls({ onGoForwardsClick, onGoBackwardsClick, dateFrom, dateTo }: CalenderControlsProps) {
