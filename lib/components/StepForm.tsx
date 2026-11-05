@@ -35,7 +35,7 @@ export default function StepForm() {
                 </Button>
             </div>
             <div className={step === 1 ? 'flex-1 min-h-0 flex flex-col' : 'hidden'}>
-                <div className="flex-1 min-h-0 pt-20 flex flex-col gap-8 pb-8">
+                <div className="flex-1 min-h-0 pt-4 flex flex-col gap-8 pb-8">
                     <h1 id="step-title-1" className="text-4xl">Välj en tid</h1>
                     <ComboBox
                         open={showRoomsComboboxOpen}
