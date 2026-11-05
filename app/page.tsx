@@ -1,7 +1,7 @@
 import StepForm from "@/lib/components/StepForm";
 import { getAllRooms } from "@/lib/data/room";
 import { Suspense } from "react";
-import { useBookings } from "@/lib/hooks/client/useBookings";
+import { makeBooking } from "@/lib/actions";
 
 export default async function Home() {
 
@@ -10,7 +10,7 @@ export default async function Home() {
     return (
         <>
             <Suspense>
-                <StepForm rooms={rooms} />
+                <StepForm rooms={rooms} action={makeBooking} />
             </Suspense>
         </>
     );

@@ -15,8 +15,6 @@ export function Bookings({ rooms, selectedTime, onSelectTime }: BookingsProps) {
     const calendar = useCalendar();
     const bookings = useBookings({ rooms, dateFrom: calendar.dateFrom, dateTo: calendar.dateTo });
 
-    console.log("Available bookings:", bookings.available);
-
     return (
         <>
             <Calendar

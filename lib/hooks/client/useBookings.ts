@@ -21,6 +21,10 @@ export function getAvailableRoomId(availableRoom: AvailableRoom) {
     return `${availableRoom.room.id}-${availableRoom.from.toISOString()}-${availableRoom.to.toISOString()}`;
 }
 
+function getAvailableRoomsKey(availableRooms: AvailableRoom[]) {
+    return availableRooms.map(getAvailableRoomId).join("|");
+}
+
 const workdayStartHour = 9;
 const workdayEndHour = 17;
 const defaultDayRange = 3;
@@ -134,7 +138,12 @@ export function useBookings({ rooms, dateFrom, dateTo }: UseBookingsProps) {
             const to = dateTo ?? getDaysAhead(from, defaultDayRange);
 
             getBookingsForRooms(rooms, from, to).then(bookings => {
-                setAvailable(getAvailableRooms(rooms, bookings, from, to));
+                const nextAvailable = getAvailableRooms(rooms, bookings, from, to);
+                setAvailable(prev =>
+                    getAvailableRoomsKey(prev) === getAvailableRoomsKey(nextAvailable)
+                        ? prev
+                        : nextAvailable
+                );
             });
         }
 

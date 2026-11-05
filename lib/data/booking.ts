@@ -24,7 +24,7 @@ export async function getAllBookingsByRoom(room: number) {
     return rows;
 }
 
-export async function getBookingForRoom(room: Room, dateFrom: Date, dateTo: Date) {
+export async function getBookingForRoomNumber(room: number, dateFrom: Date, dateTo: Date) {
     const stmt = db.prepare(`
         SELECT *
         FROM Booking
@@ -33,8 +33,12 @@ export async function getBookingForRoom(room: Room, dateFrom: Date, dateTo: Date
           AND substr(from_date, 1, 10) <= ?
         ORDER BY from_date
     `);
-    const rows = stmt.all([room.id, getDateKey(dateFrom), getDateKey(dateTo)]) as Booking[] ?? [];
+    const rows = stmt.all([room, getDateKey(dateFrom), getDateKey(dateTo)]) as Booking[] ?? [];
     return rows;
+}
+
+export async function getBookingForRoom(room: Room, dateFrom: Date, dateTo: Date) {
+    return await getBookingForRoomNumber(room.id, dateFrom, dateTo);
 }
 
 export async function getBookingsForRooms(rooms: Room[], dateFrom: Date, dateTo: Date) {
