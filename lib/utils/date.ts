@@ -9,3 +9,16 @@ export function getDaysAhead(fromDate: Date, daysAhead: number = 1) {
     date.setDate(fromDate.getDate() + daysAhead - 1);
     return date;
 }
+
+export function getDatesBetween(fromDate: Date, toDate: Date) {
+    const dates = [];
+    const currentDate = new Date(fromDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+
+    while (currentDate < toDate) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+}

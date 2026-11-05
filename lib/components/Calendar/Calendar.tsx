@@ -15,7 +15,7 @@ export default function Calendar() {
                 dateTo={dateTo}
             />
             <div className="flex flex-col flex-1 min-h-0 border border-muted-foreground rounded-lg">
-                <CalendarContent />
+                <CalendarContent dateFrom={dateFrom} dateTo={dateTo} />
             </div>
         </div>
     );
