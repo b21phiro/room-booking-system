@@ -3,7 +3,7 @@ This is a small next.js application for booking rooms. It uses a sqlite database
 
 The design is primarily made for mobile, but is lightly responsive for desktop.
 
-![Skärmbild 2026-11-06 034414.png](../../OneDrive/Pictures/Screenshots/Sk%C3%A4rmbild%202026-11-06%20034414.png)
+![img_2.png](img_2.png)
 
 ## When is a room available?
 
