@@ -1,7 +1,7 @@
 import React from "react";
 import FaceSmile from "@/lib/icons/FaceSmile";
 
-export function SuccessAlert({ onResume }: { onResume: () => void }) {
+export default function SuccessAlert({ onResume }: { onResume: () => void }) {
     return (
         <>
             <div className="fixed inset-0 w-dvw h-dvh flex justify-center items-center bg-black/35 shadow">

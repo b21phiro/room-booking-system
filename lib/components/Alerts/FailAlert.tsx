@@ -1,6 +1,6 @@
 import React from "react";
 
-export function FailAlert({ onResume }: { onResume: () => void }) {
+export default function FailAlert({ onResume }: { onResume: () => void }) {
     return (
         <>
             <div className="fixed inset-0 w-dvw h-dvh flex justify-center items-center bg-black/35 shadow">

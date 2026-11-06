@@ -1,18 +1,18 @@
 'use client'
 import React, { useMemo, useState } from "react";
-import ComboBox, { ListBoxOptions } from "@/lib/components/ComboBox";
+import ComboBox from "@/lib/components/ComboBox/ComboBox";
 import Button from "@/lib/components/Button";
+import SuccessAlert from "@/lib/components/Alerts/SuccessAlert";
+import FailAlert from "@/lib/components/Alerts/FailAlert";
+import FormStep from "@/lib/components/MultiStepForm/FormStep";
+import InitialStep from "@/lib/components/MultiStepForm/InitialStep";
+import FinalStep from "@/lib/components/MultiStepForm/FinalStep";
+import ListBoxOptions from "@/lib/components/ComboBox/ListBoxOptions";
 import { useRooms } from "@/lib/hooks/client/useRooms";
 import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
 import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
 import { makeBooking } from "@/lib/actions";
-import FaceSmile from "@/lib/icons/FaceSmile";
-import {SuccessAlert} from "@/lib/components/Alerts/SuccessAlert";
-import {FailAlert} from "@/lib/components/Alerts/FailAlert";
-import FormStep from "@/lib/components/MultiStepForm/FormStep";
-import InitialStep from "@/lib/components/MultiStepForm/InitialStep";
-import FinalStep from "@/lib/components/MultiStepForm/FinalStep";
 
 export type StepFormProps = {
     rooms: Room[];
@@ -106,10 +106,17 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
                         onOpenChange={setShowRoomsComboboxOpen}
                         label={showRoomsLabel}
                     >
-                        <ListBoxOptions options={getRooms} onOptionChange={selectRoom} />
+                        <ListBoxOptions
+                            options={getRooms}
+                            onOptionChange={selectRoom}
+                        />
                         <div className="flex gap-2 my-4">
-                            <Button onClick={handleRoomSelection}>Välj</Button>
-                            <Button onClick={unSelectAll} disabled={!anySelected}>Avmarkera</Button>
+                            <Button onClick={handleRoomSelection}>
+                                Välj
+                            </Button>
+                            <Button onClick={unSelectAll} disabled={!anySelected}>
+                                Avmarkera
+                            </Button>
                         </div>
                     </ComboBox>
                     <div className="flex flex-col flex-1 min-h-0">
