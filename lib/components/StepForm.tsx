@@ -13,13 +13,27 @@ export type StepFormProps = {
     rooms: Room[];
 }
 
-export function SuccessAlert() {
+export function SuccessAlert({ onResume }: { onResume: () => void }) {
     return (
         <>
             <div className="fixed inset-0 w-dvw h-dvh flex justify-center items-center bg-black/35 shadow">
-                <div className="bg-background flex flex-col justify-center items-center py-8 px-12 rounded-2xl gap-4">
+                <button className="absolute inset-0 size-full bg-black/35" title="Stäng" onClick={onResume}></button>
+                <div className="relative z-10 bg-background flex flex-col justify-center items-center py-8 px-12 rounded-2xl gap-4">
                     <p>Ditt rum är bokat!</p>
                     <FaceSmile />
+                </div>
+            </div>
+        </>
+    );
+}
+
+export function FailAlert({ onResume }: { onResume: () => void }) {
+    return (
+        <>
+            <div className="fixed inset-0 w-dvw h-dvh flex justify-center items-center bg-black/35 shadow">
+                <button className="absolute inset-0 size-full bg-black/35" title="Stäng" onClick={onResume}></button>
+                <div className="relative z-10 bg-background flex flex-col justify-center items-center py-8 px-12 rounded-2xl gap-4">
+                    <p>Det gick inte att boka rummet!</p>
                 </div>
             </div>
         </>
@@ -33,6 +47,8 @@ export default function StepForm({ rooms }: StepFormProps) {
 
     const [ success, setSuccess ] = useState(false);
     const [ fail, setFail ] = useState(false);
+
+    const [ fullname, setFullname ] = useState("");
 
     const [ showRoomsLabel, setShowRoomsLabel ] = useState("Mötesrum");
     const [ showRoomsComboboxOpen, setShowRoomsComboboxOpen ] = useState(false);
@@ -69,16 +85,27 @@ export default function StepForm({ rooms }: StepFormProps) {
         ev.preventDefault();
         const formData = new FormData(ev.target);
         try {
-            await makeBooking(formData);
-            setSuccess(true);
+            const response = await makeBooking(formData);
+            if (response.status != 200) throw new Error(response.message);
+            else setSuccess(true);
         } catch (error) {
             console.error(error);
+            setFail(true);
         }
     };
 
+    const handleRestart = () => {
+        setStep(0);
+        setSelectedTime(null);
+        setSelectedRooms([]);
+        setSuccess(false);
+        setFail(false);
+    }
+
     return (
         <>
-            {success && <SuccessAlert />}
+            {success && <SuccessAlert onResume={handleRestart} />}
+            {fail && <FailAlert onResume={handleRestart} />}
             <form className="flex-1 min-h-0 flex" onSubmit={handleSubmit}>
                 <input type="hidden" name="room" value={selectedTime?.room.id ?? ''} />
                 <input type="hidden" name="from" value={selectedTime?.from.toISOString() ?? ''} />
@@ -126,10 +153,12 @@ export default function StepForm({ rooms }: StepFormProps) {
                                    type="text"
                                    name="fullname"
                                    placeholder="Skriv ditt fullständiga namn här"
+                                   value={fullname}
+                                   onChange={(ev) => setFullname(ev.target.value)}
                             />
                         </label>
                     </div>
-                    <Button type="submit">
+                    <Button type="submit" disabled={selectedTime === null || fullname === ""}>
                         Boka
                     </Button>
                 </div>
