@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS Room;
 
 CREATE TABLE Room (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(90) NOT NULL UNIQUE,
+  name TEXT NOT NULL UNIQUE,
   capacity INT NOT NULL
 );
 
@@ -13,8 +13,7 @@ CREATE TABLE Booking (
   room INTEGER NOT NULL,
   from_date TEXT NOT NULL,
   to_date TEXT NOT NULL,
-  firstname VARCHAR(90) NOT NULL,
-  surname VARCHAR(90) NOT NULL,
+  person TEXT NOT NULL,
   FOREIGN KEY(room) REFERENCES Room(id),
   UNIQUE (room, from_date, to_date)
 );
