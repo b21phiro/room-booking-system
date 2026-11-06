@@ -106,7 +106,7 @@ export default function StepForm({ rooms }: StepFormProps) {
         <>
             {success && <SuccessAlert onResume={handleRestart} />}
             {fail && <FailAlert onResume={handleRestart} />}
-            <form className="flex-1 min-h-0 flex md:p-4 w-full md:rounded-2xl md:border md:border-muted-foreground md:bg-background md:shadow max-w-[768px] md:mx-auto" onSubmit={handleSubmit}>
+            <form className="flex-1 min-h-0 flex md:p-4 w-full md:max-h-[72vh] md:rounded-2xl md:border md:border-muted-foreground md:bg-background md:shadow max-w-[768px] md:m-auto" onSubmit={handleSubmit}>
                 <input type="hidden" name="room" value={selectedTime?.room.id ?? ''} />
                 <input type="hidden" name="from" value={selectedTime?.from.toISOString() ?? ''} />
                 <input type="hidden" name="to" value={selectedTime?.to.toISOString() ?? ''} />
