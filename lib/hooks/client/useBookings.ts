@@ -127,32 +127,32 @@ export function useBookings({ rooms, dateFrom, dateTo }: UseBookingsProps) {
 
     const [ available, setAvailable ] = useState<AvailableRoom[]>([]);
 
-    useEffect(() => {
-        const fetchBookings = () => {
-            if (!rooms || rooms.length === 0) {
-                setAvailable([]);
-                return;
-            }
-
-            const from = dateFrom ?? new Date();
-            const to = dateTo ?? getDaysAhead(from, defaultDayRange);
-
-            getBookingsForRooms(rooms, from, to).then(bookings => {
-                const nextAvailable = getAvailableRooms(rooms, bookings, from, to);
-                setAvailable(prev =>
-                    getAvailableRoomsKey(prev) === getAvailableRoomsKey(nextAvailable)
-                        ? prev
-                        : nextAvailable
-                );
-            });
+    async function fetchBookings() {
+        if (!rooms || rooms.length === 0) {
+            setAvailable([]);
+            return;
         }
 
-        fetchBookings();
+        const from = dateFrom ?? new Date();
+        const to = dateTo ?? getDaysAhead(from, defaultDayRange);
 
+        getBookingsForRooms(rooms, from, to).then(bookings => {
+            const nextAvailable = getAvailableRooms(rooms, bookings, from, to);
+            setAvailable(prev =>
+                getAvailableRoomsKey(prev) === getAvailableRoomsKey(nextAvailable)
+                    ? prev
+                    : nextAvailable
+            );
+        });
+    }
+
+    useEffect(() => {
+        fetchBookings();
     }, [ rooms, dateFrom, dateTo ]);
 
     return {
         available,
+        refetch: fetchBookings,
     };
 
 }

@@ -11,10 +11,11 @@ import ListBoxOptions from "@/lib/components/ComboBox/ListBoxOptions";
 import { useRooms } from "@/lib/hooks/client/useRooms";
 import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
-import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
+import {AvailableRoom, getAvailableRoomId, useBookings} from "@/lib/hooks/client/useBookings";
 import { makeBooking } from "@/lib/actions";
 import Input from "@/lib/components/Input";
-import {isFullName} from "@/lib/utils/fullname";
+import { isFullName } from "@/lib/utils/fullname";
+import useCalendar from "@/lib/hooks/client/useCalendar";
 
 export type StepFormProps = {
     rooms: Room[];
@@ -36,12 +37,15 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
     const [ showRoomsComboboxOpen, setShowRoomsComboboxOpen ] = useState(false);
 
     const [ selectedRooms, setSelectedRooms ] = useState<Room[]>([]);
+
+    const [ selectedTime, setSelectedTime ] = useState<AvailableRoom | null>(null);
+
     const roomsForBookings = useMemo(
         () => selectedRooms.length > 0 ? selectedRooms : rooms,
         [selectedRooms, rooms]
     );
-
-    const [ selectedTime, setSelectedTime ] = useState<AvailableRoom | null>(null);
+    const calendar = useCalendar();
+    const bookings = useBookings({ rooms: roomsForBookings, dateFrom: calendar.dateFrom, dateTo: calendar.dateTo });
 
     const handleSelectTime = (availableRoom: AvailableRoom) => {
         setSelectedTime(prev =>
@@ -82,6 +86,10 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
         setSelectedRooms([]);
         setSuccess(false);
         setFail(false);
+        unSelectAll();
+        setFullname('');
+        setIsFullNameValid(false);
+
     }
 
     // Checks if fullname is valid.
@@ -129,7 +137,11 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
                     </ComboBox>
                     <div className="flex flex-col flex-1 min-h-0">
                         <Bookings
-                            rooms={roomsForBookings}
+                            available={bookings.available}
+                            dateTo={calendar.dateTo}
+                            dateFrom={calendar.dateFrom}
+                            goForwards={calendar.goForwards}
+                            goBackwards={calendar.goBackwards}
                             selectedTime={selectedTime}
                             onSelectTime={handleSelectTime}
                         />
