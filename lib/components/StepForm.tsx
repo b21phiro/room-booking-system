@@ -1,12 +1,12 @@
 'use client'
-import React, {useActionState, useEffect, useMemo, useState} from "react";
+import React, { useMemo, useState } from "react";
 import ComboBox, { ListBoxOptions } from "@/lib/components/ComboBox";
 import Button from "@/lib/components/Button";
 import { useRooms } from "@/lib/hooks/client/useRooms";
 import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
 import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
-import {BookingActionState, makeBooking} from "@/lib/actions";
+import { makeBooking } from "@/lib/actions";
 import FaceSmile from "@/lib/icons/FaceSmile";
 
 export type StepFormProps = {
@@ -81,7 +81,7 @@ export default function StepForm({ rooms }: StepFormProps) {
         setSelectedRooms(getRooms.filter(room => room.checked));
     };
 
-    const handleSubmit = async (ev) => {
+    const handleSubmit = async (ev: React.SubmitEvent<HTMLFormElement>) => {
         ev.preventDefault();
         const formData = new FormData(ev.target);
         try {
