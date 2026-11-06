@@ -6,12 +6,11 @@ import { useRooms } from "@/lib/hooks/client/useRooms";
 import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
 import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
-import { BookingActionState } from "@/lib/actions";
+import {BookingActionState, makeBooking} from "@/lib/actions";
 import FaceSmile from "@/lib/icons/FaceSmile";
 
 export type StepFormProps = {
     rooms: Room[];
-    action: (prevState: BookingActionState, formData: FormData) => Promise<BookingActionState>;
 }
 
 export function SuccessAlert() {
@@ -27,17 +26,13 @@ export function SuccessAlert() {
     );
 }
 
-export default function StepForm({ rooms, action }: StepFormProps) {
-
-    const [ formState, formAction, pending ] = useActionState(action, {
-        status: 0,
-        message: "",
-    });
-
-    const success = formState.status === 200;
+export default function StepForm({ rooms }: StepFormProps) {
 
     const [ step, setStep ] = useState(0);
     const { getRooms, selectRoom, selectedAmount, unSelectAll, anySelected } = useRooms({ rooms });
+
+    const [ success, setSuccess ] = useState(false);
+    const [ fail, setFail ] = useState(false);
 
     const [ showRoomsLabel, setShowRoomsLabel ] = useState("Mötesrum");
     const [ showRoomsComboboxOpen, setShowRoomsComboboxOpen ] = useState(false);
@@ -70,10 +65,21 @@ export default function StepForm({ rooms, action }: StepFormProps) {
         setSelectedRooms(getRooms.filter(room => room.checked));
     };
 
+    const handleSubmit = async (ev) => {
+        ev.preventDefault();
+        const formData = new FormData(ev.target);
+        try {
+            await makeBooking(formData);
+            setSuccess(true);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <>
             {success && <SuccessAlert />}
-            <form className="flex-1 min-h-0 flex" action={formAction}>
+            <form className="flex-1 min-h-0 flex" onSubmit={handleSubmit}>
                 <input type="hidden" name="room" value={selectedTime?.room.id ?? ''} />
                 <input type="hidden" name="from" value={selectedTime?.from.toISOString() ?? ''} />
                 <input type="hidden" name="to" value={selectedTime?.to.toISOString() ?? ''} />
@@ -123,8 +129,8 @@ export default function StepForm({ rooms, action }: StepFormProps) {
                             />
                         </label>
                     </div>
-                    <Button type="submit" disabled={pending}>
-                        {pending ? "Bokar..." : "Boka"}
+                    <Button type="submit">
+                        Boka
                     </Button>
                 </div>
             </form>

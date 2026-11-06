@@ -11,30 +11,24 @@ export type Booking = {
     surName: string;
 };
 
-function getDateKey(date: Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-}
-
-export async function getAllBookingsByRoom(room: number) {
-    const stmt = db.prepare('SELECT * FROM Booking WHERE room = ?');
-    const rows = stmt.all([room]) as Booking[] ?? [];
-    return rows;
-}
-
-export async function getBookingForRoomNumber(room: number, dateFrom: Date, dateTo: Date) {
+export async function getBookingForRoomNumber(
+    room: number,
+    dateFrom: Date,
+    dateTo: Date
+): Promise<Booking[]> {
     const stmt = db.prepare(`
         SELECT *
         FROM Booking
         WHERE room = ?
-          AND substr(to_date, 1, 10) >= ?
-          AND substr(from_date, 1, 10) <= ?
+          AND from_date < ?
+          AND to_date > ?
         ORDER BY from_date
     `);
-    const rows = stmt.all([room, getDateKey(dateFrom), getDateKey(dateTo)]) as Booking[] ?? [];
-    return rows;
+    return stmt.all(
+        room,
+        dateTo.toISOString(),
+        dateFrom.toISOString()
+    ) as Booking[];
 }
 
 export async function getBookingForRoom(room: Room, dateFrom: Date, dateTo: Date) {
