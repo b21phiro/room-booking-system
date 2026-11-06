@@ -10,15 +10,19 @@ import { makeBooking } from "@/lib/actions";
 import FaceSmile from "@/lib/icons/FaceSmile";
 import {SuccessAlert} from "@/lib/components/Alerts/SuccessAlert";
 import {FailAlert} from "@/lib/components/Alerts/FailAlert";
+import FormStep from "@/lib/components/MultiStepForm/FormStep";
+import InitialStep from "@/lib/components/MultiStepForm/InitialStep";
+import FinalStep from "@/lib/components/MultiStepForm/FinalStep";
 
 export type StepFormProps = {
     rooms: Room[];
 }
 
-export default function StepForm({ rooms }: StepFormProps) {
+export default function MultiStepForm({ rooms }: StepFormProps) {
 
     const [ step, setStep ] = useState(0);
     const { getRooms, selectRoom, selectedAmount, unSelectAll, anySelected } = useRooms({ rooms });
+    const lastStep = 2;
 
     const [ success, setSuccess ] = useState(false);
     const [ fail, setFail ] = useState(false);
@@ -85,58 +89,56 @@ export default function StepForm({ rooms }: StepFormProps) {
                 <input type="hidden" name="room" value={selectedTime?.room.id ?? ''} />
                 <input type="hidden" name="from" value={selectedTime?.from.toISOString() ?? ''} />
                 <input type="hidden" name="to" value={selectedTime?.to.toISOString() ?? ''} />
-                <div className={step === 0 ? 'flex-1 flex flex-col pt-32' : 'hidden'}>
-                    <div className="flex-1">
-                        <h1 id="step-title-0" className="text-7xl">Boka ett rum</h1>
-                    </div>
-                    <Button type="button" onClick={() => setStep(1)}>
-                        Boka
-                    </Button>
-                </div>
-                <div className={step === 1 ? 'flex-1 min-h-0 flex flex-col' : 'hidden'}>
-                    <div className="flex-1 min-h-0 pt-4 flex flex-col gap-8 pb-8">
-                        <h1 id="step-title-1" className="text-4xl">Välj en tid</h1>
-                        <ComboBox
-                            open={showRoomsComboboxOpen}
-                            onOpenChange={setShowRoomsComboboxOpen}
-                            label={showRoomsLabel}
-                        >
-                            <ListBoxOptions options={getRooms} onOptionChange={selectRoom} />
-                            <div className="flex gap-2 my-4">
-                                <Button onClick={handleRoomSelection}>Välj</Button>
-                                <Button onClick={unSelectAll} disabled={!anySelected}>Avmarkera</Button>
-                            </div>
-                        </ComboBox>
-                        <div className="flex flex-col flex-1 min-h-0">
-                            <Bookings
-                                rooms={roomsForBookings}
-                                selectedTime={selectedTime}
-                                onSelectTime={handleSelectTime}
-                            />
+                <InitialStep
+                    current={step}
+                    onBegin={() => setStep(1)}
+                    title="Boka ett rum"
+                />
+                <FormStep
+                    current={step}
+                    onNext={() => setStep(2)}
+                    title="Välj en tid"
+                    step={1}
+                    valid={selectedTime !== null}
+                >
+                    <ComboBox
+                        open={showRoomsComboboxOpen}
+                        onOpenChange={setShowRoomsComboboxOpen}
+                        label={showRoomsLabel}
+                    >
+                        <ListBoxOptions options={getRooms} onOptionChange={selectRoom} />
+                        <div className="flex gap-2 my-4">
+                            <Button onClick={handleRoomSelection}>Välj</Button>
+                            <Button onClick={unSelectAll} disabled={!anySelected}>Avmarkera</Button>
                         </div>
+                    </ComboBox>
+                    <div className="flex flex-col flex-1 min-h-0">
+                        <Bookings
+                            rooms={roomsForBookings}
+                            selectedTime={selectedTime}
+                            onSelectTime={handleSelectTime}
+                        />
                     </div>
-                    <Button type="button" disabled={selectedTime === null} onClick={() => setStep(2)}>
-                        Nästa
-                    </Button>
-                </div>
-                <div className={step === 2 ? 'flex-1 flex flex-col' : 'hidden'}>
-                    <div className="flex-1 pt-20 flex flex-col gap-8">
-                        <h1 id="step-title-2" className="text-4xl">Vem bokar?</h1>
-                        <label className="flex flex-col">
-                            <span className="font-medium text-xl">Förnamn och efternamn</span>
-                            <input className="border border-muted-foreground p-2 px-4 rounded-lg mt-2 text-lg"
-                                   type="text"
-                                   name="fullname"
-                                   placeholder="Skriv ditt fullständiga namn här"
-                                   value={fullname}
-                                   onChange={(ev) => setFullname(ev.target.value)}
-                            />
-                        </label>
-                    </div>
-                    <Button type="submit" disabled={selectedTime === null || fullname === ""}>
-                        Boka
-                    </Button>
-                </div>
+                </FormStep>
+                <FinalStep
+                    current={step}
+                    title="Vem bokar?"
+                    valid={selectedTime != null && fullname !== ""}
+                    last={lastStep}
+                >
+                    <label className="flex flex-col">
+                        <span className="font-medium text-xl">
+                            Förnamn och efternamn
+                        </span>
+                        <input className="border border-muted-foreground p-2 px-4 rounded-lg mt-2 text-lg"
+                               type="text"
+                               name="fullname"
+                               placeholder="Skriv ditt fullständiga namn här"
+                               value={fullname}
+                               onChange={(ev) => setFullname(ev.target.value)}
+                        />
+                    </label>
+                </FinalStep>
             </form>
         </>
     );
