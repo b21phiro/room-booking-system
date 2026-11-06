@@ -34,6 +34,10 @@ export function useRooms({ rooms }: UseRoomsProps) {
                 ({ ...room, checked: false })));
     };
 
+    const handleRefetch = () => {
+
+    }
+
     return {
         getRooms,
         selectRoom: handleSelectRoomChange,

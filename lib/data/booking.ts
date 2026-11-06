@@ -7,8 +7,7 @@ export type Booking = {
     room: number;
     from_date: string;
     to_date: string;
-    firstName: string;
-    surName: string;
+    person: string;
 };
 
 export async function getBookingForRoomNumber(

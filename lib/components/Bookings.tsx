@@ -1,28 +1,26 @@
-import { useBookings } from "@/lib/hooks/client/useBookings";
 import Calendar from "@/lib/components/Calendar/Calendar";
-import useCalendar from "@/lib/hooks/client/useCalendar";
-import { Room } from "@/lib/data/room";
 import { AvailableRoom } from "@/lib/hooks/client/useBookings";
 
 export type BookingsProps = {
-    rooms: Room[];
-    selectedTime: AvailableRoom | null;
-    onSelectTime: (availableRoom: AvailableRoom) => void;
+    available: AvailableRoom[];
+    goForwards: () => void;
+    goBackwards: () => void;
+    dateFrom: Date | null;
+    dateTo: Date | null;
+    selectedTime: any;
+    onSelectTime: any;
 }
 
-export function Bookings({ rooms, selectedTime, onSelectTime }: BookingsProps) {
-
-    const calendar = useCalendar();
-    const bookings = useBookings({ rooms, dateFrom: calendar.dateFrom, dateTo: calendar.dateTo });
+export function Bookings({ available, selectedTime, onSelectTime, dateTo, dateFrom, goForwards, goBackwards }: BookingsProps) {
 
     return (
         <>
             <Calendar
-                availableRooms={bookings.available}
-                onGoForwardsClick={calendar.goForwards}
-                onGoBackwardsClick={calendar.goBackwards}
-                dateFrom={calendar.dateFrom}
-                dateTo={calendar.dateTo}
+                availableRooms={available}
+                onGoForwardsClick={goForwards}
+                onGoBackwardsClick={goBackwards}
+                dateFrom={dateFrom}
+                dateTo={dateTo}
                 selectedTime={selectedTime}
                 onSelectTime={onSelectTime}
             />

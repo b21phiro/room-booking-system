@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="sv"
       className={`${roboto.variable} h-full antialiased`}
     >
-      <body className="h-dvh flex flex-col px-4 py-8">
+      <body>
         {children}
       </body>
     </html>
