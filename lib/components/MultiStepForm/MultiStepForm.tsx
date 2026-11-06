@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import ComboBox from "@/lib/components/ComboBox/ComboBox";
 import Button from "@/lib/components/Button";
 import SuccessAlert from "@/lib/components/Alerts/SuccessAlert";
@@ -13,6 +13,8 @@ import { Room } from "@/lib/data/room";
 import { Bookings } from "@/lib/components/Bookings";
 import { AvailableRoom, getAvailableRoomId } from "@/lib/hooks/client/useBookings";
 import { makeBooking } from "@/lib/actions";
+import Input from "@/lib/components/Input";
+import {isFullName} from "@/lib/utils/fullname";
 
 export type StepFormProps = {
     rooms: Room[];
@@ -28,6 +30,7 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
     const [ fail, setFail ] = useState(false);
 
     const [ fullname, setFullname ] = useState("");
+    const [ isFullNameValid, setIsFullNameValid ] = useState(false);
 
     const [ showRoomsLabel, setShowRoomsLabel ] = useState("Mötesrum");
     const [ showRoomsComboboxOpen, setShowRoomsComboboxOpen ] = useState(false);
@@ -81,6 +84,11 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
         setFail(false);
     }
 
+    // Checks if fullname is valid.
+    useEffect(() => {
+        setIsFullNameValid(isFullName(fullname));
+    }, [fullname]);
+
     return (
         <>
             {success && <SuccessAlert onResume={handleRestart} />}
@@ -130,21 +138,16 @@ export default function MultiStepForm({ rooms }: StepFormProps) {
                 <FinalStep
                     current={step}
                     title="Vem bokar?"
-                    valid={selectedTime != null && fullname !== ""}
+                    valid={selectedTime != null && fullname !== "" && isFullNameValid}
                     last={lastStep}
                 >
-                    <label className="flex flex-col">
-                        <span className="font-medium text-xl">
-                            Förnamn och efternamn
-                        </span>
-                        <input className="border border-muted-foreground p-2 px-4 rounded-lg mt-2 text-lg"
-                               type="text"
-                               name="fullname"
-                               placeholder="Skriv ditt fullständiga namn här"
-                               value={fullname}
-                               onChange={(ev) => setFullname(ev.target.value)}
-                        />
-                    </label>
+                    <Input
+                        label="Förnamn och efternamn"
+                        value={fullname}
+                        setValue={setFullname}
+                        name="fullname"
+                        placeholder="Skriv ditt fullständiga namn här"
+                    />
                 </FinalStep>
             </form>
         </>

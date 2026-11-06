@@ -2,6 +2,7 @@
 
 import db from "@/lib/db";
 import { getBookingForRoomNumber } from "@/lib/data/booking";
+import { isFullName } from "@/lib/utils/fullname";
 
 export type BookingActionState = {
     status: number;
@@ -15,8 +16,8 @@ export async function makeBooking(formData: FormData): Promise<BookingActionStat
     const from = String(formData.get('from')) ?? null;
     const to = String(formData.get('to')) ?? null;
 
-    if (!person) {
-        return { status: 400, message: 'Booking requires your name.' };
+    if (!person || !isFullName(person)) {
+        return { status: 400, message: 'Booking requires your full name.' };
     }
 
     if (room === null || from === null || to === null) {
